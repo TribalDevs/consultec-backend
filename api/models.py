@@ -17,7 +17,7 @@ ROLES = (
     (STUDENT, 'Student')
 )
 
-class CustomUserManager(BaseUserManager):
+class TechUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
@@ -68,7 +68,7 @@ class TechUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
-    objects = CustomUserManager()
+    objects = TechUserManager()
 
     def __str__(self):
         return self.email
