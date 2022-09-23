@@ -8,12 +8,12 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 ADMINISTRATOR = 1
-PERSONNEL = 2
+COLLABORATOR = 2
 STUDENT = 3
 
 ROLES = (
     (ADMINISTRATOR, 'Administrator'),
-    (PERSONNEL, 'Personnel'),
+    (COLLABORATOR, 'Collaborator'),
     (STUDENT, 'Student')
 )
 
@@ -54,8 +54,8 @@ class TechUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_("email"), max_length=60, unique=True)
     role = models.PositiveIntegerField(_("user role"), default=STUDENT)
-    is_validated = models.BooleanField(default=False)
-
+    is_validated = models.BooleanField(_("is validated student"),default=False)
+    identifier_number = models.PositiveIntegerField(_("student id"), max_length=8, unique=True)
 
     # The following fields are required for every custom User model
     username = None
