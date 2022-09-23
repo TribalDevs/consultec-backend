@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, User
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
+from api.utils.upload import get_file_path
 
 # Create your models here.
 
@@ -51,11 +52,12 @@ class TechUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class TechUser(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(_("id as uuid"),primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_("email"), max_length=60, unique=True)
     role = models.PositiveIntegerField(_("user role"), default=STUDENT)
     is_validated = models.BooleanField(_("is validated student"),default=False)
-    identifier_number = models.PositiveIntegerField(_("student id"), max_length=8, unique=True)
+    identifier_number = models.PositiveIntegerField(_("student id"), unique=True)
+    profile_picture = models.ImageField(_("student picture"), default=None, upload_to=get_file_path)
 
     # The following fields are required for every custom User model
     username = None
@@ -66,7 +68,7 @@ class TechUser(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'identifier_number']
 
     objects = TechUserManager()
 
