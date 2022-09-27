@@ -8,15 +8,6 @@ from api.utils.upload import get_file_path
 
 # Create your models here.
 
-ADMINISTRATOR = 1
-COLLABORATOR = 2
-STUDENT = 3
-
-ROLES = (
-    (ADMINISTRATOR, 'Administrator'),
-    (COLLABORATOR, 'Collaborator'),
-    (STUDENT, 'Student')
-)
 
 class TechUserManager(BaseUserManager):
     """
@@ -52,13 +43,39 @@ class TechUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class TechUser(AbstractUser):
-    id = models.UUIDField(_("id as uuid"),primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(_("email"), max_length=60, unique=True)
-    role = models.PositiveIntegerField(_("user role"), default=STUDENT)
-    is_validated = models.BooleanField(_("is validated student"),default=False)
-    identifier_number = models.PositiveIntegerField(_("student id"), unique=True)
-    profile_picture = models.ImageField(_("student picture"), default=None, upload_to=get_file_path)
 
+    ADMINISTRATOR = 1
+    COLLABORATOR = 2
+    STUDENT = 3
+
+    ROLES_CHOICES = (
+        (ADMINISTRATOR, 'Administrator'),
+        (COLLABORATOR, 'Collaborator'),
+        (STUDENT, 'Student')
+    )
+
+    id = models.UUIDField(_("id(uuid)"),primary_key=True, default=uuid.uuid4, editable=False)
+    first_name = models.CharField(_("first name"), max_length=100, blank=True)
+    last_name = models.CharField(_("last name"), max_length=100, blank=True)
+    email = models.EmailField(_("email"), max_length=60, unique=True)
+    role = models.PositiveIntegerField(_("user role"), default=STUDENT, choices=ROLES_CHOICES)
+    is_validated = models.BooleanField(_("is validated user"),default=False)
+    identifier_number = models.PositiveIntegerField(_("user id number"), unique=True)
+    profile_picture = models.ImageField(_("user picture"), default=None, upload_to=get_file_path)
+
+    
+    MALE = 'male'
+    FEMALE = 'female'
+    NOT_ESPECIFIED = 'not_especified'
+
+    GENDER_CHOICES = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (NOT_ESPECIFIED, 'Not especified')
+    )
+    
+    gender = models.CharField(_('user gender'), max_length=15, default=NOT_ESPECIFIED, choices=GENDER_CHOICES)
+    
     # The following fields are required for every custom User model
     username = None
     last_login = models.DateTimeField(_('last login'), auto_now=True)
