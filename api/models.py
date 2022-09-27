@@ -7,6 +7,13 @@ from django.utils.translation import gettext_lazy as _
 from api.utils.upload import get_file_path
 
 # Create your models here.
+ADMINISTRATOR = 1
+COLLABORATOR = 2
+STUDENT = 3
+
+MALE = 'male'
+FEMALE = 'female'
+NOT_ESPECIFIED = 'not_especified'
 
 
 class TechUserManager(BaseUserManager):
@@ -44,10 +51,6 @@ class TechUserManager(BaseUserManager):
 
 class TechUser(AbstractUser):
 
-    ADMINISTRATOR = 1
-    COLLABORATOR = 2
-    STUDENT = 3
-
     ROLES_CHOICES = (
         (ADMINISTRATOR, 'Administrator'),
         (COLLABORATOR, 'Collaborator'),
@@ -63,17 +66,14 @@ class TechUser(AbstractUser):
     identifier_number = models.PositiveIntegerField(_("user id number"), unique=True)
     profile_picture = models.ImageField(_("user picture"), default=None, upload_to=get_file_path)
 
-    
-    MALE = 'male'
-    FEMALE = 'female'
-    NOT_ESPECIFIED = 'not_especified'
+
 
     GENDER_CHOICES = (
         (MALE, 'Male'),
         (FEMALE, 'Female'),
         (NOT_ESPECIFIED, 'Not especified')
     )
-    
+
     gender = models.CharField(_('user gender'), max_length=15, default=NOT_ESPECIFIED, choices=GENDER_CHOICES)
     
     # The following fields are required for every custom User model
