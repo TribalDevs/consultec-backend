@@ -18,7 +18,6 @@ class SignUpView(APIView):
         data = request.data
 
         serializer = SignUpSerializer(data=data, many=False)
-        print(request.data, serializer.initial_data)
         if serializer.is_valid():
             USER_EMAIL = data["email"]
             USER_PASSWORD = data["password"]
@@ -31,7 +30,6 @@ class SignUpView(APIView):
                 last_name=data["last_name"],
                 gender=data["gender"],
             )
-            print(serializer.data)
             return Response(
                 {"message": "Sign up successful", "user": serializer.data},
                 status.HTTP_201_CREATED,
