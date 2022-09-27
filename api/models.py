@@ -90,4 +90,4 @@ class TechUser(AbstractUser):
     objects = TechUserManager()
 
     def __str__(self):
-        return self.email
+        return str(self.identifier_number)
