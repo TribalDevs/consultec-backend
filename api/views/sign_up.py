@@ -4,11 +4,11 @@ from api.serializers.sign_up import SignUpSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.files import File
-from urllib.request import urlretrieve
+import urllib.request
 from rest_framework_simplejwt.tokens import RefreshToken
 
 image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
-result = urlretrieve(image_url)
+result = urllib.request.urlretrieve(image_url, 'TechUser/default.jpg')
 
 
 DEFAULT_PROFILE_PICTURE = File(open(result[0], "rb"))
