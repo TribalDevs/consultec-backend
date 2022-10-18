@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files import File
 from urllib.request import urlretrieve
+from rest_framework_simplejwt.tokens import RefreshToken
 
 image_url = "https://s3.amazonaws.com/ss-usa/companies/MzawMDE3NbE0AgA/uploads/04_GF-Iconos/user.png"
 result = urlretrieve(image_url)
@@ -30,8 +31,9 @@ class SignUpView(APIView):
                 last_name=data["last_name"],
                 gender=data["gender"],
             )
+            refresh = RefreshToken.for_user(new_user)
             return Response(
-                {"message": "Sign up successful", "user": serializer.data},
+                {"message": "Sign up successful", "user": serializer.data, "access":str(refresh.access_token)},
                 status.HTTP_201_CREATED,
             )
         return Response({"error": serializer.errors}, status.HTTP_400_BAD_REQUEST)
