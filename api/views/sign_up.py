@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files import File
 import urllib.request
+import os
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -13,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class SignUpView(APIView):
     def post(self, request):
         image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
-        result = urllib.request.urlretrieve(image_url, 'TechUser/default.jpg')
+        result = urllib.request.urlretrieve(image_url, 'default.jpg')
         DEFAULT_PROFILE_PICTURE = File(open(result[0], "rb"))
 
 
@@ -32,6 +33,7 @@ class SignUpView(APIView):
                 last_name=data["last_name"],
                 gender=data["gender"],
             )
+            os.remove('default.jpg')
             refresh = RefreshToken.for_user(new_user)
             return Response(
                 {"message": "Sign up successful", "user": serializer.data, "access":str(refresh.access_token)},
