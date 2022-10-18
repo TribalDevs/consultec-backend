@@ -25,8 +25,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('api/user/', include("api.urls.sign_up"), name='sign_up'),
-    path('admin/', admin.site.urls),
-    path('api/user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/user/login/', include("api.urls.login"), name='login'),
     
 ]
 
