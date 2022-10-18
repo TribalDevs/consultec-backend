@@ -7,7 +7,7 @@ from django.core.files import File
 from urllib.request import urlretrieve
 from rest_framework_simplejwt.tokens import RefreshToken
 
-image_url = "https://s3.amazonaws.com/ss-usa/companies/MzawMDE3NbE0AgA/uploads/04_GF-Iconos/user.png"
+image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
 result = urlretrieve(image_url)
 
 
