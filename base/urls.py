@@ -19,6 +19,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('api/user/', include("api.urls.sign_up"), name='sign_up'),
@@ -26,3 +29,6 @@ urlpatterns = [
     path('api/user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
