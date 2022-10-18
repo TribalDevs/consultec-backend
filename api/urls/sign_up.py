@@ -6,5 +6,5 @@ from django.urls import path
 from api.views.sign_up import SignUpView
 
 urlpatterns = [
-    path('new/', SignUpView.as_view())
+    path('', SignUpView.as_view())
 ]
