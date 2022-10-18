@@ -65,8 +65,7 @@ USER appuser
 
 WORKDIR /home/appuser/app/devhelp/
 
-RUN export DJANGO_SETTINGS_MODULE="base.settings" \
-    && python3 manage.py collectstatic --noinput 
+RUN export DJANGO_SETTINGS_MODULE="base.settings"
     
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
