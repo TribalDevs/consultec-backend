@@ -7,15 +7,16 @@ from django.core.files import File
 import urllib.request
 from rest_framework_simplejwt.tokens import RefreshToken
 
-image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
-result = urllib.request.urlretrieve(image_url, 'TechUser/default.jpg')
 
-
-DEFAULT_PROFILE_PICTURE = File(open(result[0], "rb"))
 
 
 class SignUpView(APIView):
     def post(self, request):
+        image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
+        result = urllib.request.urlretrieve(image_url, 'TechUser/default.jpg')
+        DEFAULT_PROFILE_PICTURE = File(open(result[0], "rb"))
+
+
         data = request.data
 
         serializer = SignUpSerializer(data=data, many=False)
