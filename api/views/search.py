@@ -10,7 +10,6 @@ class SearchUserView(APIView):
     def post(self, request):
         try:
             data = request.data
-            print(request.user.id)
             item = TechUser.objects.filter(
                 (
                     Q(first_name__icontains=data["query"])
