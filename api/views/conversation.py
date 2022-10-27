@@ -128,3 +128,14 @@ class ConversationValidateView(APIView):
             )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+# ! TODO: CAREFUL, ERASE BEFORE PRODUCTION
+
+class NUKECONVERSATIONS(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        ConversationMessage.objects.all().delete()
+        ConversationUser.objects.all().delete()
+        Conversation.objects.all().delete()
+        return Response({"message": "conversations nuked"}, status.HTTP_200_OK)
