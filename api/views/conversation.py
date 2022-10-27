@@ -93,7 +93,8 @@ class ConversationValidateView(APIView):
 
     def get(self, request, user_id):
         try:
-            user = request.user.id
+            user = TechUser.objects.get(id=request.user.id)
+            user_id = TechUser.objects.get(id=user_id)
             convo = Conversation.objects.filter(
                 Q(conversationuser__user=user) & Q(conversationuser__user=user_id)
             ).first()
