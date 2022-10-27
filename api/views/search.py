@@ -4,12 +4,16 @@ from api.serializers.user import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated
 
 
 class SearchUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             data = request.data
+            user_id = request.user.id
             item = TechUser.objects.filter(
                 (
                     Q(first_name__icontains=data["query"])
@@ -17,7 +21,7 @@ class SearchUserView(APIView):
                     | Q(email__icontains=data["query"])
                     | Q(identifier_number__icontains=data["query"])
                 )
-                & ~Q(id=request.user.id)
+                & ~Q(id=user_id)
             )
             serializer = UserSerializer(item, many=True)
             return Response({"users": serializer.data}, status.HTTP_200_OK)

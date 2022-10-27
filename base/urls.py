@@ -26,7 +26,8 @@ from django.conf import settings
 urlpatterns = [
     path('api/user/new/', include("api.urls.sign_up"), name='sign up'),
     path('api/user/login/', include("api.urls.login"), name='login'),
-    path('api/user/search/', include("api.urls.search"), name='search user')
+    path('api/user/search/', include("api.urls.search"), name='search user'),
+    path('api/user/conversation/', include("api.urls.conversation"), name='conversation'),
     
 ]
 
