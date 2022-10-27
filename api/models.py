@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser, User
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from api.utils.upload import get_file_path
+from django.utils import timezone
 
 # Create your models here.
 ADMINISTRATOR = 1
@@ -91,3 +92,29 @@ class TechUser(AbstractUser):
 
     def __str__(self):
         return str(self.identifier_number)
+
+class Conversation(models.Model):
+    id = models.UUIDField(_("id(uuid)"),primary_key=True, default=uuid.uuid4, editable=False)
+    total_messages = models.PositiveIntegerField(_("total messages"), default=0)
+
+    def __str__(self):
+        return str(self.id)
+
+class ConversationUser(models.Model):
+    id = models.UUIDField(_("id(uuid)"),primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(TechUser, on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    is_active = models.BooleanField(_("is active"), default=True)
+
+    def __str__(self):
+        return str(self.id)
+
+class ConversationMessage(models.Model):
+    id = models.UUIDField(_("id(uuid)"),primary_key=True, default=uuid.uuid4, editable=False)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    user = models.ForeignKey(TechUser, on_delete=models.CASCADE)
+    message = models.TextField(_("message"), max_length=2000)
+    created_at = models.DateTimeField(_("created at"), default=timezone.now)
+
+    def __str__(self):
+        return str(self.id)
