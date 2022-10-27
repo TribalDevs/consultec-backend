@@ -60,8 +60,11 @@ class ValidateConversationView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            conversation = Conversation.objects.filter(
-                Q(conversationuser__user=initiator) & Q(conversationuser__user=receiver)
+            initiator_convos = ConversationUser.objects.filter(user=initiator)
+            # check if receiver in any of these convos
+            conversation = ConversationUser.objects.filter(
+                Q(conversation__in=initiator_convos.values_list("conversation"))
+                & Q(user=receiver)
             ).first()
 
             if not conversation:
@@ -75,9 +78,14 @@ class ValidateConversationView(APIView):
                 convo_list = [convo_initiator, convo_receiver]
                 ConversationUser.objects.bulk_create(convo_list)
 
+            if isinstance(conversation, ConversationUser):
+                conversation = conversation.conversation
+                print(conversation)
+
             new_message = ConversationMessage.objects.create(
                 conversation=conversation, user=initiator, message=data["message"]
             )
+
             return Response(
                 {
                     "message": "Message sent successfully",
@@ -88,18 +96,30 @@ class ValidateConversationView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
+
 class ConversationValidateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
         try:
-            user = TechUser.objects.get(id=request.user.id)
-            user_id = TechUser.objects.get(id=user_id)
-            convo = Conversation.objects.filter(
-                Q(conversationuser__user=user) & Q(conversationuser__user=user_id)
+            initiator = TechUser.objects.get(id=request.user.id)
+            receiver = TechUser.objects.get(id=user_id)
+
+            if initiator == receiver:
+                return Response(
+                    {"error": "You cannot have a conversation with yourself"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            initiator_convos = ConversationUser.objects.filter(user=initiator)
+            # check if receiver in any of these convos
+            convo = ConversationUser.objects.filter(
+                Q(conversation__in=initiator_convos.values_list("conversation"))
+                & Q(user=receiver)
             ).first()
-            if convo.exists():
-                messages = ConversationMessage.objects.filter(conversation=convo[0])
+
+            if convo:
+                messages = ConversationMessage.objects.filter(conversation=convo.conversation)
                 serializer = ConversationMessageSerializer(messages, many=True)
                 return Response({"message": serializer.data}, status.HTTP_200_OK)
             return Response(
