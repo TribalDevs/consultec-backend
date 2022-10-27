@@ -38,7 +38,7 @@ class ConversationMessagesView(APIView):
                 serializer = ConversationMessageSerializer(messages, many=True)
                 return Response({"message": serializer.data}, status.HTTP_200_OK)
             return Response(
-                {"error": "You are not a member of this conversation"},
+                {"error": "No conversation found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as e:
@@ -84,6 +84,26 @@ class ValidateConversationView(APIView):
                     "conversation": conversation.id,
                 },
                 status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+class ConversationValidateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        try:
+            user = request.user.id
+            convo = Conversation.objects.filter(
+                Q(conversationuser__user=user) & Q(conversationuser__user=user_id)
+            ).first()
+            if convo.exists():
+                messages = ConversationMessage.objects.filter(conversation=convo[0])
+                serializer = ConversationMessageSerializer(messages, many=True)
+                return Response({"message": serializer.data}, status.HTTP_200_OK)
+            return Response(
+                {"error": "No conversation found"},
+                status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
