@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from api.models import TechUser
-from api.serializers.sign_up import SignUpSerializer
+from api.serializers.user import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.files import File
@@ -20,7 +20,7 @@ class SignUpView(APIView):
 
         data = request.data
 
-        serializer = SignUpSerializer(data=data, many=False)
+        serializer = UserSerializer(data=data, many=False)
         if serializer.is_valid():
             USER_EMAIL = data["email"]
             USER_PASSWORD = data["password"]
