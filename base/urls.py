@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/user/login/', include("api.urls.login"), name='login'),
     path('api/user/search/', include("api.urls.search"), name='search user'),
     path('api/user/conversation/', include("api.urls.conversation"), name='conversation'),
+    path('api/user/data/', include("api.urls.user"), name='user'),
     
 ]
 
