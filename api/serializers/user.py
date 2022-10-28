@@ -11,3 +11,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_role(self, obj):
         return obj.get_role_display()
+
+class UserSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TechUser
+        fields = ['id', 'email', 'identifier_number' ,'first_name', 'last_name', 'gender', 'role', 'profile_picture']

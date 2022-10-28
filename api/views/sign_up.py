@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from api.models import TechUser
-from api.serializers.user import UserSerializer
+from api.serializers.user import UserSignUpSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.files import File
@@ -16,11 +16,10 @@ class SignUpView(APIView):
         image_url = "https://res.cloudinary.com/dt4b5tkwd/image/upload/v1666084085/dev/default-profile-picture1_ypxtk1.jpg"
         result = urllib.request.urlretrieve(image_url, 'default.jpg')
         DEFAULT_PROFILE_PICTURE = File(open(result[0], "rb"))
-
-
+        
         data = request.data
 
-        serializer = UserSerializer(data=data, many=False)
+        serializer = UserSignUpSerializer(data=data, many=False)
         if serializer.is_valid():
             USER_EMAIL = data["email"]
             USER_PASSWORD = data["password"]
