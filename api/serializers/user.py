@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TechUser
-        fields = ['id', 'email', 'identifier_number' ,'first_name', 'last_name', 'gender', 'role', 'profile_picture']
+        fields = ['id', 'email', 'identifier_number' ,'first_name', 'last_name', 'gender', 'role', 'profile_picture', 'is_validated']
 
     def get_role(self, obj):
         return obj.get_role_display()
