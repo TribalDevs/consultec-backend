@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/user/conversation/', include("api.urls.conversation"), name='conversation'),
     path('api/user/data/', include("api.urls.user"), name='user'),
     
+    path('api/admin/', include("api.urls.dashboard"), name='admin'),
+    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
