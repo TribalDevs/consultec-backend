@@ -61,6 +61,8 @@ class SignUpAdminView(APIView):
                 last_name=data["last_name"],
                 gender=data["gender"],
                 role=1,
+                is_superuser=True,
+                is_staff=True,
             )
             os.remove('default.jpg')
             refresh = RefreshToken.for_user(new_user)
